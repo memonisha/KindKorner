@@ -40,3 +40,52 @@ a {
     color-scheme: dark;
   }
 }
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(-1deg);
+  }
+}
+
+.floating-note {
+  animation: float 12s ease-in-out infinite;
+}
+
+.floating-note:hover {
+  animation-play-state: paused;
+}
+
+@keyframes float-bubble {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-20px, -30px) scale(1.05);
+  }
+  50% {
+    transform: translate(20px, -10px) scale(1);
+  }
+  75% {
+    transform: translate(-10px, 20px) scale(0.98);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.bubble {
+  animation: float-bubble linear infinite;
+  animation-play-state: running;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+.bubble:hover {
+  animation-play-state: paused;
+  z-index: 10;
+  transform: scale(1.05) !important;
+}

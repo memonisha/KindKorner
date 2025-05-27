@@ -1,12 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
+import { setUserSession } from '@/lib/auth';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -22,9 +26,10 @@ export default function LoginPage() {
     setLoading(false);
 
     if (res.ok) {
-      const data = await res.json();
-      localStorage.setItem('user', JSON.stringify(data.user));
-      window.location.href = '/dashboard';
+      const { user } = await res.json();
+      // ← store exactly the keys your Dashboard expects:
+      setUserSession(user);
+      router.push('/dashboard');
     } else {
       const err = await res.json();
       setError(err.error || 'Login failed');
@@ -40,7 +45,8 @@ export default function LoginPage() {
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily: "'Comic Sans MS', cursive, sans-serif",
-        background: 'radial-gradient(circle at top left, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)',
+        background:
+          'radial-gradient(circle at top left, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)',
         padding: 20,
         color: '#3f3f3f',
       }}
@@ -133,12 +139,14 @@ export default function LoginPage() {
           onMouseEnter={(e) => {
             e.currentTarget.style.background =
               'linear-gradient(45deg, #ff7eb3, #ff758c, #ff7eb3)';
-            e.currentTarget.style.boxShadow = '0 8px 16px rgba(255,125,150,0.8)';
+            e.currentTarget.style.boxShadow =
+              '0 8px 16px rgba(255,125,150,0.8)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background =
               'linear-gradient(45deg, #ff758c, #ff7eb3, #ff758c)';
-            e.currentTarget.style.boxShadow = '0 6px 12px rgba(255,117,140,0.6)';
+            e.currentTarget.style.boxShadow =
+              '0 6px 12px rgba(255,117,140,0.6)';
           }}
         >
           {loading ? '⌛ Logging in...' : '🚀 Let me in!'}
@@ -160,16 +168,12 @@ export default function LoginPage() {
         )}
       </form>
 
-      {/* Add bounce keyframes */}
+      {/* bounce keyframes */}
       <style>
         {`
           @keyframes bounce {
-            0%, 100% {
-              transform: translateY(0);
-            }
-            50% {
-              transform: translateY(-15px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
           }
         `}
       </style>
