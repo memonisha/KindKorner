@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
     "bcryptjs": "^3.0.2",
+    "bootstrap": "^5.3.6",
     "cookie": "^1.0.2",
     "jsonwebtoken": "^9.0.2",
     "next": "15.1.8",
@@ -22,8 +23,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.1.8",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.7",
     "typescript": "^5"
   }
 }
