@@ -29,6 +29,8 @@ export default function DashboardPage() {
   // Load notes, detect timezone, check auth
   useEffect(() => {
     // Redirect if not logged in
+    if (typeof window === 'undefined') return; // Ensure client-side
+
     const userId = localStorage.getItem('userId');
     if (!userId) {
       router.push('/login');
