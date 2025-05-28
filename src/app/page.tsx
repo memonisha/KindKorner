@@ -23,14 +23,10 @@ const GRADIENTS = [
 export default function DashboardPage() {
   const [notes, setNotes] = useState<Note[] | null>(null);
   const [userTz, setUserTz] = useState<string>('');
-  const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const storedUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
-    setUserId(storedUserId);
-    setUserTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
-
+    const storedUserId = localStorage.getItem('userId');
     fetch(`/api/kindnotes/index?user_id=${storedUserId || 'public'}`)
       .then((res) => res.json())
       .then((json) => {
@@ -41,15 +37,9 @@ export default function DashboardPage() {
         setNotes(notesWithGradient);
       })
       .catch(() => setNotes([]));
-  }, []);
 
-  function handleDelete(id: string) {
-    if (!confirm('🗑️ Delete this note?')) return;
-    fetch('/api/kindnotes/delete', {
-      method: 'DELETE',
-      body: JSON.stringify({ id }),
-    }).then(() => setNotes(notes?.filter((n) => n.id !== id) || []));
-  }
+    setUserTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  }, []);
 
   const FormattedDate = ({ isoDate }: { isoDate: string }) => {
     const [formatted, setFormatted] = useState('');
@@ -89,15 +79,13 @@ export default function DashboardPage() {
         }}
       >
         <div>
-          <h1
-            style={{
-              fontSize: 28,
-              marginBottom: 30,
-              textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-              animation: 'bounce 2s infinite',
-              userSelect: 'none',
-            }}
-          >
+          <h1 style={{
+            fontSize: 28,
+            marginBottom: 30,
+            textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+            animation: 'bounce 2s infinite',
+            userSelect: 'none',
+          }}>
             📒 Welcome to the KindKorner...❤️ <br />
             Here, every note sparks kindness✨ and brightens someone’s day🌈
           </h1>
@@ -162,28 +150,6 @@ export default function DashboardPage() {
                 cursor: 'default',
               }}
             >
-              {userId && (
-                <button
-                  onClick={() => handleDelete(note.id)}
-                  style={{
-                    position: 'absolute',
-                    top: 10,
-                    right: 10,
-                    background: '#fff',
-                    border: 'none',
-                    color: '#333',
-                    borderRadius: '50%',
-                    width: 30,
-                    height: 30,
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-                  }}
-                  title="Delete Note"
-                >
-                  🗑️
-                </button>
-              )}
               <h2 style={{ margin: 0, fontSize: 24 }}>{note.title}</h2>
               <p style={{ margin: '10px 0', fontSize: 16 }}>{note.content}</p>
               <FormattedDate isoDate={note.created_at} />
@@ -192,7 +158,6 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* bounce keyframes */}
       <style>
         {`
           @keyframes bounce {
