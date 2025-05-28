@@ -64,7 +64,17 @@ export default function LoginPage() {
       >
         🔐 Login Time! 🔑
       </h1>
-
+      
+ <img
+  src="birdie.gif"
+  alt="kind hands"
+  style={{
+    width: '200px',
+    height: 'auto',
+    marginBottom: '20px',
+    marginTop:'-30px'
+   
+  }}></img>
       <form
         onSubmit={handleLogin}
         style={{

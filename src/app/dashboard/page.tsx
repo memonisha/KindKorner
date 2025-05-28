@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
     const userId = localStorage.getItem('userId');
     if (!userId) {
-      router.push('/login');
+      router.push('/');
       return;
     }
 
@@ -50,7 +50,7 @@ export default function DashboardPage() {
   // Logout handler
   function handleLogout() {
     clearUserSession();
-    router.push('/login');
+    router.push('/');
   }
 
   // Delete handler
@@ -74,7 +74,14 @@ export default function DashboardPage() {
       {/* Top controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: 36, margin: 0 }}>📒 Your KindNotes</h1>
+          <h1  style={{
+          fontSize: 28,
+          marginBottom: 30,
+          textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+          animation: 'bounce 2s infinite',
+          userSelect: 'none',
+        }}>📒Welcome to the KindKorner...🎉 <br></br>
+        Here, we are uniting hearts❤️, spreading smiles🌟, one kind note at a time 🌈</h1>
           {userTz && (
             <p style={{ fontSize: 14, color: '#555', margin: '4px 0 0' }}>
               (Your time zone: {userTz})
@@ -233,6 +240,16 @@ export default function DashboardPage() {
           })}
         </div>
       )}
+      
+      {/* bounce keyframes */}
+      <style>
+        {`
+          @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+          }
+        `}
+      </style>
     </main>
   );
 }

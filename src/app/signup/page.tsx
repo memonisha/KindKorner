@@ -58,23 +58,42 @@ export default function SignupPage() {
         background: 'linear-gradient(135deg, #FFC3A0 0%, #FFAFBD 100%)',
       }}
     >
-      <h1 style={{ color: '#5D3FD3', fontSize: 36, marginBottom: 15 }}>
-        ✨ Join the KindKorner Club!
+   
+      <h1  style={{
+          fontSize: 48,
+          marginBottom: 30,
+          textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+          animation: 'bounce 2s infinite',
+          userSelect: 'none',
+        }}>
+        
+        ✨ Join the <span style={{color:'crimson'}}>KindKorner</span> Club 😃🎉🎉
       </h1>
+         <img
+  src="hands.gif"
+  alt="kind hands"
+  style={{
+    width: '200px',
+    height: 'auto',
+    marginBottom: '20px',
+    marginTop:'-30px'
+   
+  }}
+/>
       <form
         onSubmit={handleSignup}
         style={{
           display: 'flex',
           flexDirection: 'column',
           width: '100%',
-          maxWidth: 400,
-          background: '#fff',
+          maxWidth: 420,
+          background: '#89c5b4',
           padding: 30,
           borderRadius: 20,
           boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-        }}
+          marginTop:-40        }}
       >
-        <label style={{ marginBottom: 10, color: '#333' }}>
+        <label style={{ marginBottom: 10, color: '#333', fontStyle: 'bold' }}>
           Username 🧑‍🚀
           <input
             type="text"
@@ -87,13 +106,14 @@ export default function SignupPage() {
               marginTop: 5,
               borderRadius: 10,
               border: '1px solid #ccc',
-              fontSize: 16,
+              fontSize: 20,
               fontFamily: "'Comic Sans MS', cursive",
+              fontWeight: 'bold',
             }}
           />
         </label>
 
-        <label style={{ marginBottom: 10, color: '#333' }}>
+        <label style={{ marginBottom: 10, color: '#333',fontStyle: 'bold' }}>
           Password 🔒
           <input
             type="password"
@@ -106,8 +126,9 @@ export default function SignupPage() {
               marginTop: 5,
               borderRadius: 10,
               border: '1px solid #ccc',
-              fontSize: 16,
+              fontSize: 20,
               fontFamily: "'Comic Sans MS', cursive",
+               fontWeight: 'bold',
             }}
           />
         </label>
@@ -143,10 +164,20 @@ export default function SignupPage() {
       </form>
       <p style={{ marginTop: 15, color: '#555' }}>
         Already a member?{' '}
-        <a href="/login" style={{ color: '#5D3FD3', textDecoration: 'underline' }}>
-          Log In Here
+        <a href="/login" style={{ color: '#3e25a1', textDecoration: 'underline' }}>
+          Log In Here!
         </a>
       </p>
+      
+      {/* bounce keyframes */}
+      <style>
+        {`
+          @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+          }
+        `}
+      </style>
     </main>
   );
 }

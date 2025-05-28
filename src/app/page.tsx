@@ -8,7 +8,7 @@ type Note = {
   title: string;
   content: string;
   created_at: string;
-  bgGradient: string; // added for storing gradient per note
+  bgGradient: string;
 };
 
 const GRADIENTS = [
@@ -23,19 +23,17 @@ const GRADIENTS = [
 export default function DashboardPage() {
   const [notes, setNotes] = useState<Note[] | null>(null);
   const [userTz, setUserTz] = useState<string>('');
+  const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      router.push('/login');
-      return;
-    }
+    const storedUserId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null;
+    setUserId(storedUserId);
+    setUserTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
-    fetch(`/api/kindnotes/index?user_id=${userId}`)
+    fetch(`/api/kindnotes/index?user_id=${storedUserId || 'public'}`)
       .then((res) => res.json())
       .then((json) => {
-        // Assign a random gradient once per note here to avoid randomness on render
         const notesWithGradient = json.notes.map((note: Note) => ({
           ...note,
           bgGradient: GRADIENTS[Math.floor(Math.random() * GRADIENTS.length)],
@@ -43,9 +41,7 @@ export default function DashboardPage() {
         setNotes(notesWithGradient);
       })
       .catch(() => setNotes([]));
-
-    setUserTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
-  }, [router]);
+  }, []);
 
   function handleDelete(id: string) {
     if (!confirm('🗑️ Delete this note?')) return;
@@ -55,7 +51,6 @@ export default function DashboardPage() {
     }).then(() => setNotes(notes?.filter((n) => n.id !== id) || []));
   }
 
-  // Client-only date formatting component
   const FormattedDate = ({ isoDate }: { isoDate: string }) => {
     const [formatted, setFormatted] = useState('');
     useEffect(() => {
@@ -94,7 +89,18 @@ export default function DashboardPage() {
         }}
       >
         <div>
-          <h1 style={{ fontSize: 36, margin: 0 }}>📒 Your KindNotes</h1>
+          <h1
+            style={{
+              fontSize: 28,
+              marginBottom: 30,
+              textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+              animation: 'bounce 2s infinite',
+              userSelect: 'none',
+            }}
+          >
+            📒 Welcome to the KindKorner...❤️ <br />
+            Here, every note sparks kindness✨ and brightens someone’s day🌈
+          </h1>
           {userTz && (
             <p style={{ fontSize: 14, color: '#555', margin: '4px 0 0' }}>
               (Your time zone: {userTz})
@@ -153,9 +159,31 @@ export default function DashboardPage() {
                 position: 'relative',
                 animation: 'float 10s ease-in-out infinite',
                 transition: 'transform 0.3s',
-                cursor: 'default', // no editing
+                cursor: 'default',
               }}
             >
+              {userId && (
+                <button
+                  onClick={() => handleDelete(note.id)}
+                  style={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
+                    background: '#fff',
+                    border: 'none',
+                    color: '#333',
+                    borderRadius: '50%',
+                    width: 30,
+                    height: 30,
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                  }}
+                  title="Delete Note"
+                >
+                  🗑️
+                </button>
+              )}
               <h2 style={{ margin: 0, fontSize: 24 }}>{note.title}</h2>
               <p style={{ margin: '10px 0', fontSize: 16 }}>{note.content}</p>
               <FormattedDate isoDate={note.created_at} />
@@ -163,6 +191,16 @@ export default function DashboardPage() {
           ))}
         </div>
       )}
+
+      {/* bounce keyframes */}
+      <style>
+        {`
+          @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+          }
+        `}
+      </style>
     </main>
   );
 }
